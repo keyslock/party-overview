@@ -1,0 +1,71 @@
+<div>
+    {{> "modules/party-overview/templates/parts/Tabs.html"}}
+    <section class="content">
+        <div class="tab" data-tab="general" data-group="party">
+            <div class="table-row header">
+                {{> "modules/party-overview/templates/parts/FilterButton.html"}}
+                <div class="text">{{localize "MAGICALOGIA.TmpName"}}</div>
+                <div class="num" title="{{localize "MAGICALOGIA.Burn"}}">{{localize "MAGICALOGIA.Burn"}}</div>
+                <div class="num" title="{{localize "MAGICALOGIA.Weakness"}}">{{localize "MAGICALOGIA.Weakness"}}</i></div>
+                <div class="num" title="{{localize "MAGICALOGIA.Sickness"}}">{{localize "MAGICALOGIA.Sickness"}}</div>
+                <div class="num" title="{{localize "MAGICALOGIA.Block"}}">{{localize "MAGICALOGIA.Block"}}</div>
+                <div class="num" title="{{localize "MAGICALOGIA.Mana"}}"><i class="fas fa-heart"></i></div>
+                <div class="num" title="{{localize "MAGICALOGIA.TmpMana"}}"><i class="fa-solid fa-heart-circle-plus"></i></div>
+            </div>
+
+            {{#each actors as | actor | }}
+            {{#if actor.isNotArchType}}
+            <div class="table-row">
+                {{> "modules/party-overview/templates/parts/ToggleVisibilityButton.html" actor=actor}}
+                <div class="text">{{ actor.shortestName }}</div>
+
+                <div class="num">{{#if actor.status.burn }}<i class="fa-solid fa-bug"></i>{{/if}}</div>
+                <div class="num">{{#if actor.status.weakness }}<i class="fa-solid fa-user-injured"></i>{{/if}}</div>
+                <div class="num">{{#if actor.status.sickness }}<i class="fa-solid fa-viruses"></i>{{/if}}</div>
+                <div class="num">{{#if actor.status.block }}<i class="fa-solid fa-user-slash"></i>{{/if}}</div>
+                <div class="num">{{ actor.mana.value }}/{{ actor.mana.max }}</div>
+                <div class="num">{{ actor.tmp_mana.value }}</div>
+            </div>
+            {{/if}}
+            {{/each}}
+        </div>
+        
+        <!-- Spellbooks -->
+        <div class="tab" data-tab="spellbooks" data-group="party">
+            <div class="table-row header">
+                <div class="text">{{localize "MAGICALOGIA.Ability"}}</div>
+                <div class="text">{{localize "MAGICALOGIA.Cost"}}</div>
+                <div class="num"><i class="fa-solid fa-sparkles"></i></div>
+            </div>
+            {{#each actors as | actor | }}
+                {{#if actor.isNotArchType}}
+                <div class="table-row header">{{ actor.shortestName }}</div>
+                {{#each actor.spellbook}}
+                <div class="table-row">
+                    <div class="text">{{ this.name }}</div>
+                    <div class="text">{{ this.cost }}</div>
+                    <div class="num">{{ this.charge }}&nbsp;/&nbsp;{{ actor.force }}</div>
+                </div>
+                {{/each}}
+                {{/if}}
+            {{/each}}
+        </div>
+        <!-- ArchType -->
+        <div class="tab" data-tab="archtypes" data-group="party">
+            <div class="table-row header">
+                <div class="text">元型名</div>
+                <div class="text">エフェクト</div>
+            </div>
+            {{#each actors as | actor | }}
+                {{#if actor.isArchType}}
+                <div class="table-row">
+                    <div class="text">{{ actor.shortestName }}</div>
+                    <div class="text">
+                    {{#each actor.spellbook}}{{ this.name }}{{/each}}
+                    </div>
+                </div>
+                {{/if}}
+            {{/each}}
+        </div>
+    </section>
+</div>

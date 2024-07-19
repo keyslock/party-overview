@@ -1502,6 +1502,83 @@ export class CoC7Provider extends SystemProvider {
 	}
 }
 
+export class sw25Provider extends SystemProvider {
+	get template() {
+		return "/modules/party-overview/templates/sw25.hbs";
+	}
+
+	getActorDetails(actor) {
+		const data = actor.system;
+		return {
+			name: actor.name,
+			hp: data.hp,
+			mp: data.mp,
+			hit: data.itemhitbase,
+			dodge: data.dodgebase,
+			protect: data.attributes?.protectionpoint ?? data.pp
+		};
+	}
+}
+
+export class magicalogiaProvider extends SystemProvider {
+	get template() {
+		return "/modules/party-overview/templates/magicalogia.hbs";
+	}
+
+	get tabs() {
+		return {
+			spellbooks: { id: "spellbooks", visible: true, localization: "MAGICALOGIA.Ability" },
+			archtypes: { id: "archtypes", visible: true, localization: "元型" },
+		};
+	}
+
+	getActorDetails(actor) {
+		const data = actor.system;
+		const spellbook = new Array();
+		let isArchType = actor.system.details.magic_name == "元型";
+		let isNotArchType = actor.system.details.magic_name != "元型";
+		actor.collections.items.forEach(
+			function(value, key) {
+				if(value.type == "ability"){
+					if(isNotArchType){
+						if( value.system.cost != "なし" && value.system.cost != "-"){
+							var spell = {
+							  name: value.name,
+							  cost: value.system.cost,
+							  charge: value.system.charge,
+							}
+							spellbook.push(spell);
+						}
+					} else {
+							var effect = "";
+							if(parseInt(value.system.charge) == 0){
+								effect = value.name;
+							} else {
+								effect = value.name.substring(0,value.name.length - 1 ) + value.system.charge + value.name.substring(value.name.length - 1);
+							}
+							var spell = {
+							  name: effect
+							}
+							spellbook.push(spell);
+					}
+				}
+			}
+		)
+		return {
+			name: actor.name,
+			mana: data.mana,
+			force: data.details.root_force,
+			tmp_mana: data.tmp_mana,
+			status: data.status,
+			spellbook: spellbook,
+			isArchType : isArchType,
+			isNotArchType : isNotArchType,
+		};
+	}
+	
+	
+}
+
 export class GURPSProvider extends SystemProvider {
 	get template() {
 		return "/modules/party-overview/templates/gurps.hbs";

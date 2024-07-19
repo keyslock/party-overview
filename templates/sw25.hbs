@@ -1,0 +1,38 @@
+<div>
+    <section class="content">
+        <div class="tab" data-group="party">
+            <div class="table-row header">
+                {{> "modules/party-overview/templates/parts/FilterButton.html"}}
+                <div class="text">Name</div>
+                <div class="num" title="HP"><i class="fas fa-heart"></i></div>
+                <div class="num" title="MP"><i class="fa-solid fa-star-of-david"></i></div>
+                <div class="num" title="防護点"><i class="fa-solid fa-shield"></i></div>
+            </div>
+
+            {{#each actors as | actor | }}
+            <div class="table-row">
+                {{> "modules/party-overview/templates/parts/ToggleVisibilityButton.html" actor=actor}}
+                <div class="text">{{ actor.shortestName }}</div>
+
+                <div class="num">
+                    <span style="display: block; border-bottom: thin solid black">
+                            {{ actor.hp.value }}</span>
+                    </span>
+                    <span style="display: block">
+                            {{ actor.hp.max}}</span>
+                    </span>
+                </div>
+                <div class="num">
+                    <span style="display: block; border-bottom: thin solid black">
+                            {{ actor.mp.value }}</span>
+                    </span>
+                    <span style="display: block">
+                            {{ actor.mp.max}}</span>
+                    </span>
+                </div>
+               <div class="num">{{ actor.protect }}</div>
+            </div>
+            {{/each}}
+        </div>
+    </section>
+</div>
